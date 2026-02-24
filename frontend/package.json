@@ -9,14 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vitejs/plugin-react": "^4.2.0",
     "axios": "^1.13.5",
     "lucide-react": "^0.575.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^7.13.1"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^4.2.0",
+    "react-router-dom": "^7.13.1",
     "vite": "^5.2.0"
   }
 }
