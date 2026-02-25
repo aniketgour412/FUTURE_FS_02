@@ -10,7 +10,10 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const DATA_FILE = path.join(__dirname, 'data', 'leads.json');
+// Vercel serverless has read-only filesystem except /tmp
+const DATA_FILE = process.env.VERCEL
+    ? '/tmp/leads.json'
+    : path.join(__dirname, 'data', 'leads.json');
 
 app.use(cors({
     origin: function (origin, callback) {
