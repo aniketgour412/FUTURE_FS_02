@@ -146,7 +146,7 @@ const AdminDashboard = () => {
                 {/* Main Table Area */}
                 <div className="card fade-in stagger-3" style={{ padding: 0, display: 'flex', flexDirection: 'column', gap: 0 }}>
                     {/* Header Section */}
-                    <div className="flex justify-between items-center" style={{ padding: '1.5rem 2rem', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.2)' }}>
+                    <div className="admin-header flex justify-between items-center" style={{ padding: '1.25rem 1.25rem', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.2)' }}>
                         <div className="flex items-center gap-4">
                             <div className="flex items-center justify-center" style={{ width: '40px', height: '40px', background: 'var(--info-bg)', borderRadius: 'var(--radius)', color: 'var(--neon-cyan)', boxShadow: '0 0 15px rgba(0, 210, 255, 0.15)' }}>
                                 <Users size={20} />
@@ -187,106 +187,158 @@ const AdminDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="table-container" style={{ padding: '0 0.5rem 1rem 0.5rem' }}>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Contact Info</th>
-                                    <th>Source</th>
-                                    <th>Status</th>
-                                    <th>Date Added</th>
-                                    <th>Update Status</th>
-                                    <th style={{ width: '40px' }}></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {loading ? (
+                    <div className="table-desktop">
+                        <div className="table-container" style={{ padding: '0 0.5rem 1rem 0.5rem' }}>
+                            <table>
+                                <thead>
                                     <tr>
-                                        <td colSpan="6" style={{ padding: '3rem 2rem' }}>
-                                            <div className="flex flex-col gap-4">
-                                                <div className="animate-pulse w-full" style={{ height: '56px', borderRadius: 'var(--radius-sm)' }}></div>
-                                                <div className="animate-pulse w-full" style={{ height: '56px', borderRadius: 'var(--radius-sm)' }}></div>
-                                                <div className="animate-pulse w-full" style={{ height: '56px', borderRadius: 'var(--radius-sm)' }}></div>
-                                            </div>
-                                        </td>
+                                        <th>Contact Info</th>
+                                        <th>Source</th>
+                                        <th>Status</th>
+                                        <th>Date Added</th>
+                                        <th>Update Status</th>
+                                        <th style={{ width: '40px' }}></th>
                                     </tr>
-                                ) : filteredLeads.length === 0 ? (
-                                    <tr>
-                                        <td colSpan="6" style={{ textAlign: 'center', padding: '6rem 2rem' }}>
-                                            <div className="flex flex-col items-center gap-4 fade-in">
-                                                <div style={{ background: 'var(--bg-darken)', padding: '1.5rem', borderRadius: '50%', color: 'var(--text-muted)' }}>
-                                                    <Inbox size={40} />
-                                                </div>
-                                                <div>
-                                                    <h3 style={{ margin: 0, color: 'var(--text-primary)' }}>No leads found</h3>
-                                                    <p style={{ margin: '0.5rem 0 0 0' }}>No leads match your current filter criteria.</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    filteredLeads.map(lead => (
-                                        <tr
-                                            key={lead.id}
-                                            style={{
-                                                cursor: 'pointer',
-                                                transform: selectedLead?.id === lead.id ? 'translateX(5px)' : 'none',
-                                                boxShadow: selectedLead?.id === lead.id ? 'var(--glow-primary)' : 'none'
-                                            }}
-                                            onClick={() => {
-                                                setSelectedLead(lead);
-                                                setNoteText(lead.notes || '');
-                                            }}
-                                        >
-                                            <td>
-                                                <div style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{lead.name}</div>
-                                                <div style={{ fontSize: '0.85rem', color: 'var(--neon-cyan)', marginTop: '0.25rem' }}>{lead.email}</div>
-                                            </td>
-                                            <td style={{ color: 'var(--text-secondary)' }}>{lead.source}</td>
-                                            <td>
-                                                <span className={`badge badge-${lead.status.toLowerCase()}`}>
-                                                    {lead.status}
-                                                </span>
-                                            </td>
-                                            <td style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                                                {new Date(lead.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                                            </td>
-                                            <td onClick={(e) => e.stopPropagation()}>
-                                                <div className="flex items-center gap-3">
-                                                    <div style={{ position: 'relative' }}>
-                                                        <select
-                                                            value={lead.status}
-                                                            onChange={(e) => handleStatusUpdate(lead.id, e.target.value)}
-                                                            style={{ padding: '0.4rem 1rem', fontSize: '0.85rem' }}
-                                                        >
-                                                            <option value="New">Set: New</option>
-                                                            <option value="Contacted">Set: Contacted</option>
-                                                            <option value="Converted">Set: Converted</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td onClick={(e) => e.stopPropagation()} style={{ textAlign: 'right', paddingRight: '1rem' }}>
-                                                <div className="flex items-center gap-4 justify-end">
-                                                    <button
-                                                        onClick={() => handleDeleteLead(lead.id)}
-                                                        style={{ background: 'transparent', border: 'none', color: 'var(--danger-text)', padding: '0.5rem', cursor: 'pointer', opacity: 0.7, transition: 'opacity 0.2s' }}
-                                                        onMouseOver={(e) => e.currentTarget.style.opacity = 1}
-                                                        onMouseOut={(e) => e.currentTarget.style.opacity = 0.7}
-                                                        title="Delete Lead"
-                                                    >
-                                                        <Trash2 size={18} />
-                                                    </button>
-                                                    <ChevronRight size={20} color={selectedLead?.id === lead.id ? 'var(--neon-cyan)' : 'var(--text-muted)'} style={{ pointerEvents: 'none' }} />
+                                </thead>
+                                <tbody>
+                                    {loading ? (
+                                        <tr>
+                                            <td colSpan="6" style={{ padding: '3rem 2rem' }}>
+                                                <div className="flex flex-col gap-4">
+                                                    <div className="animate-pulse w-full" style={{ height: '56px', borderRadius: 'var(--radius-sm)' }}></div>
+                                                    <div className="animate-pulse w-full" style={{ height: '56px', borderRadius: 'var(--radius-sm)' }}></div>
+                                                    <div className="animate-pulse w-full" style={{ height: '56px', borderRadius: 'var(--radius-sm)' }}></div>
                                                 </div>
                                             </td>
                                         </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
+                                    ) : filteredLeads.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="6" style={{ textAlign: 'center', padding: '6rem 2rem' }}>
+                                                <div className="flex flex-col items-center gap-4 fade-in">
+                                                    <div style={{ background: 'var(--bg-darken)', padding: '1.5rem', borderRadius: '50%', color: 'var(--text-muted)' }}>
+                                                        <Inbox size={40} />
+                                                    </div>
+                                                    <div>
+                                                        <h3 style={{ margin: 0, color: 'var(--text-primary)' }}>No leads found</h3>
+                                                        <p style={{ margin: '0.5rem 0 0 0' }}>No leads match your current filter criteria.</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        filteredLeads.map(lead => (
+                                            <tr
+                                                key={lead.id}
+                                                style={{
+                                                    cursor: 'pointer',
+                                                    transform: selectedLead?.id === lead.id ? 'translateX(5px)' : 'none',
+                                                    boxShadow: selectedLead?.id === lead.id ? 'var(--glow-primary)' : 'none'
+                                                }}
+                                                onClick={() => {
+                                                    setSelectedLead(lead);
+                                                    setNoteText(lead.notes || '');
+                                                }}
+                                            >
+                                                <td>
+                                                    <div style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{lead.name}</div>
+                                                    <div style={{ fontSize: '0.85rem', color: 'var(--neon-cyan)', marginTop: '0.25rem' }}>{lead.email}</div>
+                                                </td>
+                                                <td style={{ color: 'var(--text-secondary)' }}>{lead.source}</td>
+                                                <td>
+                                                    <span className={`badge badge-${lead.status.toLowerCase()}`}>
+                                                        {lead.status}
+                                                    </span>
+                                                </td>
+                                                <td style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                                                    {new Date(lead.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                </td>
+                                                <td onClick={(e) => e.stopPropagation()}>
+                                                    <div className="flex items-center gap-3">
+                                                        <div style={{ position: 'relative' }}>
+                                                            <select
+                                                                value={lead.status}
+                                                                onChange={(e) => handleStatusUpdate(lead.id, e.target.value)}
+                                                                style={{ padding: '0.4rem 1rem', fontSize: '0.85rem' }}
+                                                            >
+                                                                <option value="New">Set: New</option>
+                                                                <option value="Contacted">Set: Contacted</option>
+                                                                <option value="Converted">Set: Converted</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td onClick={(e) => e.stopPropagation()} style={{ textAlign: 'right', paddingRight: '1rem' }}>
+                                                    <div className="flex items-center gap-4 justify-end">
+                                                        <button
+                                                            onClick={() => handleDeleteLead(lead.id)}
+                                                            style={{ background: 'transparent', border: 'none', color: 'var(--danger-text)', padding: '0.5rem', cursor: 'pointer', opacity: 0.7, transition: 'opacity 0.2s' }}
+                                                            onMouseOver={(e) => e.currentTarget.style.opacity = 1}
+                                                            onMouseOut={(e) => e.currentTarget.style.opacity = 0.7}
+                                                            title="Delete Lead"
+                                                        >
+                                                            <Trash2 size={18} />
+                                                        </button>
+                                                        <ChevronRight size={20} color={selectedLead?.id === lead.id ? 'var(--neon-cyan)' : 'var(--text-muted)'} style={{ pointerEvents: 'none' }} />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>{/* end table-desktop */}
+
+                    {/* ── Mobile Lead Cards (shown only on small screens) ── */}
+                    <div className="lead-cards-mobile">
+                        {loading ? (
+                            <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>Loading leads...</div>
+                        ) : filteredLeads.length === 0 ? (
+                            <div style={{ padding: '3rem 1rem', textAlign: 'center' }}>
+                                <Inbox size={36} color="var(--text-muted)" />
+                                <p style={{ marginTop: '1rem' }}>No leads found</p>
+                            </div>
+                        ) : (
+                            filteredLeads.map(lead => (
+                                <div
+                                    key={lead.id}
+                                    className="lead-card-mobile"
+                                    onClick={() => { setSelectedLead(lead); setNoteText(lead.notes || ''); }}
+                                    style={{ borderLeft: selectedLead?.id === lead.id ? '3px solid var(--neon-cyan)' : '3px solid transparent' }}
+                                >
+                                    <div className="lead-card-mobile-header">
+                                        <div>
+                                            <div style={{ fontWeight: '600', fontSize: '1rem', color: 'var(--text-primary)' }}>{lead.name}</div>
+                                            <div style={{ fontSize: '0.82rem', color: 'var(--neon-cyan)', marginTop: '0.15rem' }}>{lead.email}</div>
+                                        </div>
+                                        <span className={`badge badge-${lead.status.toLowerCase()}`}>{lead.status}</span>
+                                    </div>
+                                    <div className="lead-card-mobile-meta">
+                                        <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', background: 'rgba(255,255,255,0.06)', padding: '0.2rem 0.6rem', borderRadius: '999px' }}>{lead.source}</span>
+                                        <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{new Date(lead.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                                    </div>
+                                    <div className="lead-card-mobile-actions" onClick={e => e.stopPropagation()}>
+                                        <select
+                                            value={lead.status}
+                                            onChange={(e) => handleStatusUpdate(lead.id, e.target.value)}
+                                        >
+                                            <option value="New">New</option>
+                                            <option value="Contacted">Contacted</option>
+                                            <option value="Converted">Converted</option>
+                                        </select>
+                                        <button
+                                            onClick={() => handleDeleteLead(lead.id)}
+                                            style={{ background: 'rgba(255,0,120,0.1)', border: '1px solid rgba(255,0,120,0.3)', color: 'var(--danger-text)', padding: '0.5rem 0.75rem', borderRadius: 'var(--radius-sm)', cursor: 'pointer', minHeight: '40px', display: 'flex', alignItems: 'center' }}
+                                        >
+                                            <Trash2 size={15} />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        )}
                     </div>
-                </div>
+
+                </div>{/* end main table card */}
 
                 {selectedLead ? (
                     <div className="card fade-in stagger-4" style={{ position: 'sticky', top: '6rem' }}>
