@@ -3,8 +3,10 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const jwt = require('jsonwebtoken');
-const { v4: uuidv4 } = require('uuid'); // Switched to uuid for simplicity in npm install
 const dotenv = require('dotenv');
+
+// Simple UUID-like ID generator (avoids ESM-only uuid v13 issue)
+const generateId = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
 
 dotenv.config();
 
@@ -108,7 +110,7 @@ app.post('/api/leads', (req, res) => {
 
     const leads = readLeads();
     const newLead = {
-        id: uuidv4(),
+        id: generateId(),
         name,
         email,
         phone,
