@@ -9,7 +9,7 @@ const LeadCapture = () => {
         phone: '',
         source: 'Website',
     });
-    const [status, setStatus] = useState('idle'); // idle, loading, success, error
+    const [status, setStatus] = useState('idle');
     const [message, setMessage] = useState('');
 
     const handleChange = (e) => {
@@ -31,14 +31,14 @@ const LeadCapture = () => {
 
     if (status === 'success') {
         return (
-            <div className="container lead-capture-form" style={{ textAlign: 'center' }}>
-                <div className="card fade-in flex-col items-center gap-2" style={{ borderTop: '4px solid var(--neon-green)' }}>
-                    <div style={{ background: 'var(--success-bg)', padding: '1.5rem', borderRadius: '50%', marginBottom: '1rem', color: 'var(--neon-green)', boxShadow: '0 0 20px rgba(0, 176, 155, 0.2)' }}>
-                        <CheckCircle size={48} />
+            <div className="capture-page">
+                <div className="card fade-in capture-success">
+                    <div className="capture-success-icon">
+                        <CheckCircle size={44} color="var(--neon-green)" />
                     </div>
-                    <h2 style={{ color: 'var(--text-primary)' }}>Lead Submitted!</h2>
-                    <p style={{ margin: 0, fontSize: '1.05rem', color: 'var(--text-secondary)' }}>Your information has been received. We'll be in touch shortly.</p>
-                    <button onClick={() => setStatus('idle')} className="btn-outline" style={{ marginTop: '2.5rem' }}>
+                    <h2>Lead Submitted!</h2>
+                    <p>Your information has been received. We'll be in touch shortly.</p>
+                    <button onClick={() => setStatus('idle')} className="btn-outline" style={{ marginTop: '1.5rem' }}>
                         Submit Another Lead
                     </button>
                 </div>
@@ -47,27 +47,21 @@ const LeadCapture = () => {
     }
 
     return (
-        <div className="container lead-capture-form" style={{ maxWidth: '650px', marginTop: '6vh', marginBottom: '8vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <div className="card fade-in" style={{ padding: '3.5rem 3rem', position: 'relative', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.8), 0 0 40px rgba(0, 240, 255, 0.1)' }}>
-                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '4px', background: 'var(--gradient-blue)' }}></div>
-
-                <div style={{ marginBottom: '2.5rem', textAlign: 'center' }}>
-                    <div className="flex justify-center" style={{ marginBottom: '1.5rem' }}>
-                        <div style={{ background: 'var(--info-bg)', padding: '1rem', borderRadius: '50%', color: 'var(--neon-cyan)', boxShadow: '0 0 20px rgba(0, 210, 255, 0.2)' }}>
-                            <Activity size={32} />
-                        </div>
+        <div className="capture-page">
+            <div className="card fade-in capture-card">
+                <div className="capture-header">
+                    <div className="capture-icon">
+                        <Activity size={28} color="var(--neon-cyan)" />
                     </div>
-                    <h1 style={{ fontSize: '1.8rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Contact Us</h1>
-                    <p className="m-0">Fill in your details below and we'll get back to you.</p>
+                    <h1 className="capture-title">Contact Us</h1>
+                    <p className="capture-subtitle">Fill in your details below and we'll get back to you.</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                    <div style={{ position: 'relative' }}>
+                <form onSubmit={handleSubmit} className="capture-form">
+                    <div className="form-group">
                         <label>Full Name</label>
-                        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                            <div style={{ position: 'absolute', left: '1rem', color: 'var(--text-muted)' }}>
-                                <User size={18} />
-                            </div>
+                        <div className="input-icon-wrap">
+                            <span className="input-icon"><User size={17} /></span>
                             <input
                                 type="text"
                                 name="name"
@@ -75,17 +69,14 @@ const LeadCapture = () => {
                                 onChange={handleChange}
                                 placeholder="Enter your full name..."
                                 required
-                                style={{ paddingLeft: '3rem' }}
                             />
                         </div>
                     </div>
 
-                    <div style={{ position: 'relative' }}>
+                    <div className="form-group">
                         <label>Email Address</label>
-                        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                            <div style={{ position: 'absolute', left: '1rem', color: 'var(--text-muted)' }}>
-                                <Mail size={18} />
-                            </div>
+                        <div className="input-icon-wrap">
+                            <span className="input-icon"><Mail size={17} /></span>
                             <input
                                 type="email"
                                 name="email"
@@ -93,81 +84,54 @@ const LeadCapture = () => {
                                 onChange={handleChange}
                                 placeholder="yourname@email.com"
                                 required
-                                style={{ paddingLeft: '3rem' }}
                             />
                         </div>
                     </div>
 
-                    <div style={{ position: 'relative' }}>
-                        <label>Phone Number <span style={{ color: 'var(--text-muted)', fontWeight: 'normal', textTransform: 'none', letterSpacing: 'normal' }}>(Optional)</span></label>
-                        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                            <div style={{ position: 'absolute', left: '1rem', color: 'var(--text-muted)' }}>
-                                <Phone size={18} />
-                            </div>
+                    <div className="form-group">
+                        <label>Phone <span className="label-optional">(Optional)</span></label>
+                        <div className="input-icon-wrap">
+                            <span className="input-icon"><Phone size={17} /></span>
                             <input
                                 type="tel"
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleChange}
                                 placeholder="Your phone number..."
-                                style={{ paddingLeft: '3rem' }}
                             />
                         </div>
                     </div>
 
-                    <div style={{ position: 'relative' }}>
+                    <div className="form-group">
                         <label>Lead Source</label>
-                        <select
-                            name="source"
-                            value={formData.source}
-                            onChange={handleChange}
-                            style={{
-                                appearance: 'none',
-                                color: 'var(--neon-cyan)',
-                                fontWeight: '500',
-                                letterSpacing: '0.5px'
-                            }}
-                        >
-                            <option value="Website">Website</option>
-                            <option value="Social Media">Social Media</option>
-                            <option value="Referral">Referral</option>
-                            <option value="Other">Other</option>
-                        </select>
-                        <div style={{ position: 'absolute', right: '1rem', top: '42px', pointerEvents: 'none', color: 'var(--neon-cyan)' }}>
-                            <ChevronDown size={20} />
+                        <div style={{ position: 'relative' }}>
+                            <select name="source" value={formData.source} onChange={handleChange}>
+                                <option value="Website">Website</option>
+                                <option value="Social Media">Social Media</option>
+                                <option value="Referral">Referral</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <span className="select-arrow"><ChevronDown size={18} /></span>
                         </div>
                     </div>
 
                     {status === 'error' && (
-                        <div style={{ background: 'var(--danger-bg)', color: 'var(--danger-text)', padding: '1rem', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem', border: '1px solid rgba(244, 106, 106, 0.3)', boxShadow: '0 0 10px rgba(244, 106, 106, 0.1)' }}>
-                            {message}
-                        </div>
+                        <div className="form-error">{message}</div>
                     )}
 
-                    <div style={{ marginTop: '1.5rem' }}>
-                        <button
-                            type="submit"
-                            className="btn-primary w-full"
-                            disabled={status === 'loading'}
-                            style={{ padding: '0.9rem', fontSize: '1rem', background: 'var(--gradient-blue)', border: 'none' }}
-                        >
-                            {status === 'loading' ? (
-                                <span className="flex items-center gap-2">
-                                    <span className="animate-pulse flex items-center gap-2">
-                                        <Activity size={18} /> Submitting...
-                                    </span>
-                                </span>
-                            ) : (
-                                <>
-                                    <span>Submit Lead</span>
-                                    <Send size={18} />
-                                </>
-                            )}
-                        </button>
-                        <p style={{ textAlign: 'center', fontSize: '0.8rem', marginTop: '1.5rem', color: 'var(--text-muted)' }}>
-                            Your information is safe and secure with us.
-                        </p>
-                    </div>
+                    <button
+                        type="submit"
+                        className="btn-primary w-full capture-submit"
+                        disabled={status === 'loading'}
+                    >
+                        {status === 'loading' ? (
+                            <><Activity size={17} /> Submitting...</>
+                        ) : (
+                            <><Send size={17} /> Submit Lead</>
+                        )}
+                    </button>
+
+                    <p className="capture-note">Your information is safe and secure with us.</p>
                 </form>
             </div>
         </div>

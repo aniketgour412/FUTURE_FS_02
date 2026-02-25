@@ -1,8 +1,9 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { Activity, LogOut, LayoutDashboard, PlusCircle, MonitorDot } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Activity, LogOut, LayoutDashboard, PlusCircle } from 'lucide-react';
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const token = localStorage.getItem('crm_token');
 
     const handleLogout = () => {
@@ -10,43 +11,62 @@ const Navbar = () => {
         navigate('/login');
     };
 
+    const isActive = (path) => location.pathname === path;
+
     return (
-        <nav className="navbar fade-in" style={{ padding: '1rem 0', background: 'rgba(5, 5, 8, 0.6)' }}>
-            <div className="container flex justify-between items-center" style={{ padding: '0.5rem 2.5rem' }}>
+        <nav className="navbar fade-in">
+            <div className="navbar-inner">
+                {/* Logo */}
                 <Link to="/" className="logo flex items-center gap-3" style={{ textDecoration: 'none' }}>
-                    <div style={{ background: 'var(--info-bg)', padding: '0.5rem', borderRadius: 'var(--radius-sm)', display: 'flex', boxShadow: 'inset 0 0 10px rgba(0,240,255,0.3), 0 0 20px rgba(0, 240, 255, 0.4)' }}>
-                        <Activity size={26} color="var(--neon-cyan)" />
+                    <div style={{
+                        background: 'var(--info-bg)',
+                        padding: '0.45rem',
+                        borderRadius: 'var(--radius-sm)',
+                        display: 'flex',
+                        boxShadow: '0 0 15px rgba(0, 240, 255, 0.3)'
+                    }}>
+                        <Activity size={22} color="var(--neon-cyan)" />
                     </div>
-                    <div className="flex items-baseline" style={{ whiteSpace: 'nowrap' }}>
-                        <span className="logo-main" style={{ textShadow: '0 0 20px rgba(0, 240, 255, 0.5)' }}>Lead</span>
+                    <div className="flex items-baseline">
+                        <span className="logo-main">Lead</span>
                         <span className="logo-sub">CRM</span>
                     </div>
                 </Link>
-                <div className="flex items-center gap-4">
+
+                {/* Nav Actions */}
+                <div className="nav-actions">
                     <Link
                         to="/"
-                        className="btn-accent"
-                        style={{ fontSize: '0.9rem', padding: '0.6rem 1.5rem', borderRadius: 'var(--radius-full)' }}
+                        className={isActive('/') ? 'nav-btn nav-btn-active' : 'nav-btn'}
+                        title="Add Lead"
                     >
-                        <PlusCircle size={18} />
-                        Add Lead
+                        <PlusCircle size={17} />
+                        <span className="nav-btn-label">Add Lead</span>
                     </Link>
+
                     {token ? (
                         <>
                             <Link
                                 to="/admin"
-                                className="btn-primary"
-                                style={{ fontSize: '0.9rem', padding: '0.6rem 1.5rem', borderRadius: 'var(--radius-full)', boxShadow: '0 0 25px rgba(176, 38, 255, 0.6), inset 0 1px 0 rgba(255,255,255,0.3)' }}
+                                className={isActive('/admin') ? 'nav-btn nav-btn-primary nav-btn-active' : 'nav-btn nav-btn-primary'}
+                                title="Dashboard"
                             >
-                                <MonitorDot size={18} />
-                                Dashboard
+                                <LayoutDashboard size={17} />
+                                <span className="nav-btn-label">Dashboard</span>
                             </Link>
-                            <button onClick={handleLogout} className="btn-outline" style={{ fontSize: '0.85rem', padding: '0.6rem 1.2rem', borderColor: 'rgba(244, 106, 106, 0.3)', color: 'var(--danger-text)', borderRadius: 'var(--radius-full)' }}>
-                                <LogOut size={16} /> Logout
+                            <button
+                                onClick={handleLogout}
+                                className="nav-btn nav-btn-danger"
+                                title="Logout"
+                            >
+                                <LogOut size={17} />
+                                <span className="nav-btn-label">Logout</span>
                             </button>
                         </>
                     ) : (
-                        <Link to="/login" className="btn-primary" style={{ fontSize: '0.85rem', padding: '0.5rem 1.25rem', background: 'var(--gradient-purple)', border: 'none', borderRadius: 'var(--radius-full)' }}>Admin Login</Link>
+                        <Link to="/login" className="nav-btn nav-btn-primary" title="Admin Login">
+                            <span className="nav-btn-label">Admin Login</span>
+                        </Link>
                     )}
                 </div>
             </div>
